@@ -14,7 +14,7 @@ import pyparsing as pp
 def _parse(mystr):
 
     LBRACE, RBRACE, EQUAL = map(pp.Suppress, "{}=")
-    field = pp.Word(pp.printables + ' ', excludeChars='[]=')
+    field = pp.Word(f'{pp.printables} ', excludeChars='[]=')
     field.addParseAction(pp.tokenMap(str.rstrip))
     string = pp.dblQuotedString().setParseAction(pp.removeQuotes)
     number = pp.pyparsing_common.number()
@@ -60,10 +60,7 @@ def to_dict_list(mystr):
         blp.message.Message, these should be '\\n' seperated
     """
     res = _parse(mystr)
-    dicts = []
-    for res_dict in res:
-        dicts.append(res_dict.asDict())
-    return dicts
+    return [res_dict.asDict() for res_dict in res]
 
 
 def to_json(mystr):
